@@ -1,21 +1,17 @@
-# Use an official Rasa image as a parent image
-FROM rasa/rasa:latest
-
-# Set the working directory
-WORKDIR /app
+# Use the official Rasa image as a base
+FROM rasa/rasa:3.6.20
 
 # Copy the project files into the container
 COPY . /app
 
-# Install any additional dependencies
-# (Specify dependencies if needed, e.g., for custom actions)
-RUN pip install --no-cache-dir -r requirements.txt
+# Set the working directory
+WORKDIR /app
 
-# Expose the port the app runs on
+# Install additional dependencies
+RUN pip install -r requirements.txt
+
+# Expose port 5005 for the Rasa server
 EXPOSE 5005
 
-# Define environment variable for Rasa
-ENV RASA_X_ENABLED=True
-
-# Run the Rasa server
-CMD ["rasa", "run", "--cors", "*"]
+# Start Rasa server with API enabled
+CMD ["rasa", "run", "--enable-api", "--cors", "*", "--debug"]
