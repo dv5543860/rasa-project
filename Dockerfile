@@ -4,14 +4,15 @@ FROM rasa/rasa:3.6.20
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
+# Copy your Rasa project files into the container
 COPY . /app
-
-# Install any additional Python dependencies if you have a requirements.txt file
-# RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose the port Rasa will run on
 EXPOSE 5005
 
-# Command to run Rasa server
-CMD ["rasa", "run", "--enable-api", "--cors", "*", "--debug"]
+# Set environment variables to handle SQLAlchemy warnings
+ENV SQLALCHEMY_WARN_20=1
+ENV SQLALCHEMY_SILENCE_UBER_WARNING=1
+
+# Run the Rasa server with API enabled and CORS allowed for all origins
+CMD ["rasa", "run", "--enable-api", "--cors", "*"]
